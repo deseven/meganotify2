@@ -1,0 +1,9 @@
+{
+  "title": "MegaNotify",
+  "icon": "../Contents/Resources/main.icns",
+  "background": "bg.png",
+  "contents": [
+    { "x": 448, "y": 355, "type": "link", "path": "/Applications" },
+    { "x": 192, "y": 355, "type": "file", "path": "../MegaNotify.app" }
+  ]
+}
