@@ -22,7 +22,9 @@ die() {
 }
 
 if [ -f "$pb/compilers/pbcompiler" ]; then
-	echo -ne $greenColor"compiling $shortName..."$noColor
+	echo -ne $greenColor"compiling libmegaplan..."$noColor
+	"$pb/compilers/pbcompiler" -dl "$loc/Contents/Libs/libmegaplan.dylib" "$loc/../../libmegaplan/libmegaplan.pb" > /dev/null || die "failed to build libmegaplan"
+	echo -ne $greenColor"\ncompiling $shortName..."$noColor
 	"$pb/compilers/pbcompiler" -u -e "$loc/$name.app" "$loc/../main.pb" > /dev/null || die "failed to build $shortName"
 	if [ -d "$loc/$name.app" ]; then
 		echo -ne $greenColor"\ninjecting resources..."$noColor

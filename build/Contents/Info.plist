@@ -19,7 +19,7 @@
 	<key>CFBundleVersion</key>
 	<string>2.0.0</string>
 	<key>CFBundleName</key>
-	<string>iCanHazShortcut</string>
+	<string>MegaNotify</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>NSHighResolutionCapable</key>

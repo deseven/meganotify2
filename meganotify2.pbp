@@ -7,28 +7,34 @@
   <section name="data">
     <explorer view="../../" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2016-09-07 23:54" user="deseven" host="de7air.local"/>
+    <lastopen date="2016-09-08 14:12" user="deseven" host="de7air.local"/>
   </section>
   <section name="files">
-    <file name="main.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
-    </file>
     <file name="const.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+      <fingerprint md5="6db2f48fccbe5ed0c33088166c6ee252"/>
+    </file>
+    <file name="main.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="2557bfe5dcbf24d338c4b5d3e2b0a4a1"/>
     </file>
     <file name="proc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="d41d8cd98f00b204e9800998ecf8427e"/>
+      <fingerprint md5="d8830cd80f082b0b5ba46d3994a4ce96"/>
+    </file>
+    <file name="helpers.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="36c5a22c8047cf7ae4fc130626dcff89"/>
     </file>
   </section>
   <section name="targets">
     <target name="Default Target" enabled="1" default="1">
       <inputfile value="main.pb"/>
       <outputfile value="MegaNotify.app"/>
+      <executable value="MegaNotify.app"/>
       <options unicode="1" xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
+      <tools>MN_INJECT,MN_INJECT_BUILD</tools>
     </target>
   </section>
 </project>
