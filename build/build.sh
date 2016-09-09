@@ -24,23 +24,23 @@ die() {
 if [ -f "$pb/compilers/pbcompiler" ]; then
 	echo -ne $greenColor"compiling libmegaplan..."$noColor
 	"$pb/compilers/pbcompiler" -dl "$loc/Contents/Libs/libmegaplan.dylib" "$loc/../../libmegaplan/libmegaplan.pb" > /dev/null || die "failed to build libmegaplan"
-	echo -ne $greenColor"\ncompiling $shortName..."$noColor
-	"$pb/compilers/pbcompiler" -u -e "$loc/$name.app" "$loc/../main.pb" > /dev/null || die "failed to build $shortName"
+	echo -ne $greenColor"\ncompiling ${name}..."$noColor
+	"$pb/compilers/pbcompiler" -u -e "$loc/${name}.app" "$loc/../main.pb" > /dev/null || die "failed to build ${name}"
 	if [ -d "$loc/$name.app" ]; then
 		echo -ne $greenColor"\ninjecting resources..."$noColor
 		cd ..
-		build/inject.sh "$loc/$name.app" || die "failed to inject $shortName"
-		echo -ne $greenColor"\nsigning bundle..."$noColor
+		build/inject.sh "$loc/${name}.app" || die "failed to inject $shortName"
+		echo -ne $greenColor"\nsigning bundles..."$noColor
 		if [ ! -z "$1" ]; then
 			# app signing
-			codesign -f -s $1 "$loc/$name.app" -r="host => anchor apple and identifier com.apple.translate designated => identifier $ident" > /dev/null || die "failed to sign $shortName"
+			codesign -f -s $1 "$loc/${name}.app" -r="host => anchor apple and identifier com.apple.translate designated => identifier $ident" > /dev/null || die "failed to sign $shortName"
 		fi
-		echo -ne $greenColor"\npacking distro..."$noColor
 		cd "$loc"
-		zip -r9 "$shortName.zip" "$name.app" > /dev/null || die "failed to pack $shortName"
+		echo -ne $greenColor"\npacking distro..."$noColor
+		zip -r9 "$shortName.zip" "${name}.app" > /dev/null || die "failed to pack $shortName"
 		echo -ne $greenColor"\ncreating dmg..."$noColor
 		cd appdmg
-		appdmg "$name.json" "../$shortName.dmg" > /dev/null 2>&1 || die "failed to create dmg"
+		appdmg "${name}.json" "../$shortName.dmg" > /dev/null 2>&1 || die "failed to create dmg"
 		echo
 	else
 		die "bundle not found"

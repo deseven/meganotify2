@@ -37,23 +37,24 @@ Procedure advancedStatusBar()
     If Not statusItem
       statusItem = CocoaMessage(0,CocoaMessage(0,statusBar,"statusItemWithLength:",itemLength),"retain")
     EndIf
-    CreatePopupMenu(0)
-    MenuItem(0,"Window")
+    CreatePopupMenu(#menu)
+    MenuItem(#menuMegaplan,"Open Megaplan")
     MenuBar()
-    MenuItem(1,"Quit")
+    MenuItem(#menuPrefs,"Preferences")
+    MenuItem(#menuAbout,"About")
+    MenuItem(#menuQuit,"Quit")
     CocoaMessage(0,statusItem,"setHighlightMode:",#YES)
     CocoaMessage(0,statusItem,"setLength:@",@itemLength)
-    CocoaMessage(0,statusItem,"setImage:",ImageID(#resIconConn))
-    CocoaMessage(0,statusItem,"setMenu:",CocoaMessage(0,MenuID(0),"firstObject"))
+    CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon))
+    CocoaMessage(0,statusItem,"setMenu:",CocoaMessage(0,MenuID(#menu),"firstObject"))
   Else
     If statusBar And statusItem
       CocoaMessage(0,statusBar,"removeStatusItem:",statusItem)
     EndIf
     statusItem = 0
-    If IsMenu(0) : FreeMenu(0) : EndIf
+    If IsMenu(#menu) : FreeMenu(#menu) : EndIf
   EndIf
 EndProcedure
-
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
 ; Folding = -
 ; EnableUnicode

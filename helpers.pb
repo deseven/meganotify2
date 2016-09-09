@@ -1,4 +1,8 @@
-﻿Procedure deliverNotification(title.s,subtitle.s,text.s)
+﻿ImportC "/System/Library/Frameworks/Accelerate.framework/Accelerate"
+  vImageUnpremultiplyData_RGBA8888 (*src, *dest, flags) 
+EndImport
+
+Procedure deliverNotification(title.s,subtitle.s,text.s)
   Static notificationCenter.i
   If Not notificationCenter
     notificationCenter = CocoaMessage(0,0,"NSUserNotificationCenter defaultUserNotificationCenter")
@@ -14,9 +18,41 @@
   ProcedureReturn #False
 EndProcedure
 
-ImportC "/System/Library/Frameworks/Accelerate.framework/Accelerate"
-  vImageUnpremultiplyData_RGBA8888 (*src, *dest, flags) 
-EndImport
+Procedure.b enableLoginItem(bundleID.s,state.b)
+  Protected loginItemsPath.s = GetHomeDirectory() + "Library/LaunchAgents/"
+  Protected loginItemPath.s = loginItemsPath + bundleID + ".plist"
+  Protected bundlePathPtr = CocoaMessage(0,CocoaMessage(0,CocoaMessage(0,0,"NSBundle mainBundle"),"bundlePath"),"UTF8String")
+  If bundlePathPtr
+    Protected bundlePath.s = PeekS(bundlePathPtr,-1,#PB_UTF8)
+  Else
+    ProcedureReturn #False
+  EndIf
+  If state
+    If FileSize(loginItemsPath) <> -2
+      If Not CreateDirectory(loginItemsPath)
+        ProcedureReturn #False
+      EndIf
+    EndIf
+    Protected loginItemFile = CreateFile(#PB_Any,loginItemPath)
+    If IsFile(loginItemFile)
+      Protected loginItemPlist.s = ReplaceString(#loginItemPlist,"{appid}",bundleID)
+      loginItemPlist = ReplaceString(loginItemPlist,"{apppath}",bundlePath)
+      WriteString(loginItemFile,loginItemPlist,#PB_UTF8)
+      CloseFile(loginItemFile)
+      RunProgram("launchctl",~"load \"" + loginItemPath + ~"\"","")
+    Else
+      ProcedureReturn #False
+    EndIf
+  Else
+    If FileSize(loginItemPath) <> -1
+      RunProgram("launchctl",~"unload \"" + loginItemPath + ~"\"","")
+      If Not DeleteFile(loginItemPath,#PB_FileSystem_Force)
+        ProcedureReturn #False
+      EndIf
+    EndIf
+  EndIf
+  ProcedureReturn #True
+EndProcedure
 
 Procedure.f getBackingScaleFactor()
   Define backingScaleFactor.CGFloat = 1.0
