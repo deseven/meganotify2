@@ -1,6 +1,11 @@
 ﻿#myName = "MegaNotify"
 #myVer = "2.0.0"
+#myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
+
+#errorMsg = "Something went wrong, please try to reinstall this tool or contact the developer.\nStep: "
+#invalidCredentials = "Can't connect with provided credentials. Please re-check the information you provided."
+#disabledWarn = ~"Looks like you disabled both notifications and status bar icon. It means that you would not be able to receive any notifications at all.\nIs that really what you want?"
 
 Enumeration gadgets
   #wnd
@@ -24,9 +29,32 @@ Enumeration menu
 EndEnumeration
 
 Enumeration resources
-  #resLogo
+  #resFontMono
+  #resFontMonoX2
   #resIcon
   #resIconConn
+  #resIcon1
+  #resIcon2
+  #resIcon3
+  #resIcon4
+  #resIcon5
+  #resIcon6
+  #resIcon7
+  #resIcon8
+  #resIcon9
+  #resIconMore
+EndEnumeration
+
+Enumeration events #PB_Event_FirstCustomValue
+  #eventConnected
+  #eventDisconnected
+  #eventAlert
+  #eventWrongCredentials
+EndEnumeration
+
+Enumeration states
+  #megaplanDisconnected
+  #megaplanConnected
 EndEnumeration
 
 #NSWindowButtonMinimize = 1

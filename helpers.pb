@@ -18,6 +18,7 @@ Procedure deliverNotification(title.s,subtitle.s,text.s)
   ProcedureReturn #False
 EndProcedure
 
+; concept by Kukulkan (http://forums.purebasic.com/english/viewtopic.php?f=19&t=64057)
 Procedure.b enableLoginItem(bundleID.s,state.b)
   Protected loginItemsPath.s = GetHomeDirectory() + "Library/LaunchAgents/"
   Protected loginItemPath.s = loginItemsPath + bundleID + ".plist"

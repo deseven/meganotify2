@@ -4,6 +4,8 @@ IncludeFile "../libmegaplan/pb-wrapper.pb"
 IncludeFile "const.pb"
 
 Define app = CocoaMessage(0,0,"NSApplication sharedApplication")
+Define statusBar.i,statusItem.i,alerts.i,megaplanState.b
+Define connectThread.i,checkThread.i
 
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
@@ -22,7 +24,7 @@ StringGadget(#gadLogin,20,55,260,30,"")
 CocoaMessage(0,CocoaMessage(0,GadgetID(#gadLogin),"cell"),"setPlaceholderString:$",@"Login")
 CocoaMessage(0,GadgetID(#gadLogin),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadLogin),"setFocusRingType:",1)
-StringGadget(#gadPassword,20,85,260,30,"")
+StringGadget(#gadPassword,20,85,260,30,"",#PB_String_Password)
 CocoaMessage(0,CocoaMessage(0,GadgetID(#gadPassword),"cell"),"setPlaceholderString:$",@"Password")
 CocoaMessage(0,GadgetID(#gadPassword),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadPassword),"setFocusRingType:",1)
@@ -37,18 +39,29 @@ CocoaMessage(0,GadgetID(#gadEnableStatusBar),"setFocusRingType:",1)
 CheckBoxGadget(#gadEnableNotifications,20,205,180,20,"Enable notifications")
 CocoaMessage(0,GadgetID(#gadEnableNotifications),"setFocusRingType:",1)
 
+initResources()
+
+settings()
+If GetGadgetState(#gadEnableStatusBar)
+  advancedStatusBar()
+EndIf
+
+alerts = 1
+updateStatusIcon()
+
 SetActiveGadget(-1)
 
+If Len(GetGadgetText(#gadHost)) And Len(GetGadgetText(#gadLogin)) And Len(GetGadgetText(#gadPassword))
+  CocoaMessage(0,app,"hide:")
+  PostEvent(#eventDisconnected)
+EndIf
+
 If mega_init(0,GetPathPart(ProgramFilename()) + "../Libs/libmegaplan.dylib")
-  Debug mega_version()
+  ;Debug mega_version()
 Else
   MessageRequester(#myName,"Can't load libmegaplan, exiting.")
   End 1
 EndIf
-
-;Debug mega_auth("","","plan.home-nadym.ru",#myName + "/" + #myVer)
-
-initResources()
 
 Repeat
   Define ev = WaitWindowEvent()
@@ -58,20 +71,35 @@ Repeat
       Select EventGadget()
         Case #gadEnableStatusBar
           advancedStatusBar()
+          settings(#True)
         Case #gadEnableLoginItem
           If GetGadgetState(#gadEnableLoginItem) = #PB_Checkbox_Checked
-            res = enableLoginItem(#myID,#True)
-            MessageRequester(#myName,"result: " + Str(res))
+            If Not enableLoginItem(#myID,#True)
+              SetGadgetState(#gadEnableLoginItem,#PB_Checkbox_Unchecked)
+              MessageRequester(#myName,#errorMsg + "applying autostart")
+            Else
+              settings(#True)
+            EndIf
           Else
-            res = enableLoginItem(#myID,#False)
-            MessageRequester(#myName,"result: " + Str(res))
+            If Not enableLoginItem(#myID,#False)
+              SetGadgetState(#gadEnableLoginItem,#PB_Checkbox_Checked)
+              MessageRequester(#myName,#errorMsg + "disabling autostart")
+            Else
+              settings(#True)
+            EndIf
           EndIf
       EndSelect
     Case #PB_Event_Menu
       Select EventMenu()
         Case #menuMegaplan
-          
+          If Len(GetGadgetText(#gadHost))
+            RunProgram("open",GetGadgetText(#gadHost),"")
+          Else
+            SetActiveGadget(#gadHost)
+            CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+          EndIf
         Case #menuPrefs
+          softReset()
           SetActiveGadget(-1)
           CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
         Case #menuAbout
@@ -79,8 +107,35 @@ Repeat
         Case #menuQuit
           Break
       EndSelect
+    Case #eventDisconnected
+      megaplanState = #megaplanDisconnected
+      updateStatusIcon()
+      connectThread = CreateThread(@megaplanConnect(),#PB_Ignore)
+    Case #eventConnected
+      megaplanState = #megaplanConnected
+      updateStatusIcon()
+    Case #eventAlert
+      If alerts <> EventData()
+        alerts = EventData()
+        updateStatusIcon()
+      EndIf
+    Case #eventWrongCredentials
+      softReset()
+      SetActiveGadget(#gadHost)
+      CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+      MessageRequester(#myName,#invalidCredentials)
     Case #PB_Event_CloseWindow
-      CocoaMessage(0,app,"hide:")
+      If GetGadgetState(#gadEnableStatusBar) = #PB_Checkbox_Unchecked And GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Unchecked
+        If MessageRequester(#myName,#disabledWarn,#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes
+          CocoaMessage(0,app,"hide:")
+          settings(#True)
+          PostEvent(#eventDisconnected)
+        EndIf
+      Else
+        CocoaMessage(0,app,"hide:")
+        settings(#True)
+        PostEvent(#eventDisconnected)
+      EndIf
   EndSelect
 ForEver
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
