@@ -7,6 +7,8 @@
 #invalidCredentials = "Can't connect with provided credentials. Please re-check the information you provided."
 #disabledWarn = ~"Looks like you disabled both notifications and status bar icon. It means that you would not be able to receive any notifications at all.\nIs that really what you want?"
 
+#megaplanCheckInterval = 15000
+
 Enumeration gadgets
   #wnd
   #gadFrameConnection

@@ -9,9 +9,14 @@ Procedure deliverNotification(title.s,subtitle.s,text.s)
   EndIf
   Protected notification = CocoaMessage(0,CocoaMessage(0,0,"NSUserNotification alloc"),"init")
   If notification
-    CocoaMessage(0,notification,"setTitle:$",@title)
-    CocoaMessage(0,notification,"setSubtitle:$",@subtitle)
-    CocoaMessage(0,notification,"setInformativeText:$",@text)
+    ;notification.setHasActionButton_(True)
+    ;notification.setActionButtonTitle_("View")
+    If Len(title) : CocoaMessage(0,notification,"setTitle:$",@title) : EndIf
+    If Len(subtitle) : CocoaMessage(0,notification,"setSubtitle:$",@subtitle) : EndIf
+    If Len(text) : CocoaMessage(0,notification,"setInformativeText:$",@text) : EndIf
+    CocoaMessage(0,notification,"setHasActionButton:",#NO)
+    ;CocoaMessage(0,notification,"setActionButtonTitle:$",@"View")
+    ;If options : CocoaMessage(0,notification,"setUserInfo:",options) : EndIf
     CocoaMessage(0,notificationCenter,"deliverNotification:",notification)
     ProcedureReturn #True
   EndIf
@@ -94,6 +99,22 @@ Procedure loadImageEx(Image,Filename.s)
     EndIf
   EndIf  
   ProcedureReturn Result
+EndProcedure
+
+Procedure.s buildTZ()
+  Define tz.i = CocoaMessage(0, 0, "NSTimeZone systemTimeZone")
+  Define offset = CocoaMessage(0,tz,"secondsFromGMT")/60/60
+  If offset = 0
+    ProcedureReturn "+0000"
+  ElseIf offset > 0 And offset < 10
+    ProcedureReturn "+0" + Str(offset) + "00"
+  ElseIf offset >= 10
+    ProcedureReturn "+" + Str(offset) + "00"
+  ElseIf offset < 0 And offset > -10
+    ProcedureReturn "-0" + Str(offset*-1) + "00"
+  Else
+    ProcedureReturn "-" + Str(offset*-1) + "00"
+  EndIf
 EndProcedure
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
 ; Folding = -

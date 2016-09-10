@@ -1,4 +1,6 @@
 ﻿Macro softReset()
+  megaplanAccess = ""
+  megaplanSecret = ""
   If IsThread(connectThread) : KillThread(connectThread) : EndIf
   If IsThread(checkThread) : KillThread(checkThread) : EndIf
   alerts = 0
@@ -194,6 +196,7 @@ Procedure megaplanConnect(dummy)
   Protected host.s = GetGadgetText(#gadHost)
   Protected login.s = GetGadgetText(#gadLogin)
   Protected password.s = GetGadgetText(#gadPassword)
+  Shared megaplanAccess.s,megaplanSecret.s
   If Len(host) And Len(login) And Len(password)
     Protected res.s = "-1"
     Repeat
@@ -202,9 +205,19 @@ Procedure megaplanConnect(dummy)
         If res = "0"
           PostEvent(#eventWrongCredentials)
         Else
-          Debug res
+          Protected json = ParseJSON(#PB_Any,res,#PB_JSON_NoCase)
+          If IsJSON(json)
+            Protected authAnswer.megaplanAuth
+            ExtractJSONStructure(JSONValue(json),@authAnswer,megaplanAuth)
+            FreeJSON(json)
+            If authAnswer\status("code") = "ok" And Len(authAnswer\data("AccessId")) And Len(authAnswer\data("SecretKey"))
+              megaplanAccess = authAnswer\data("AccessId")
+              megaplanSecret = authAnswer\data("SecretKey")
+              PostEvent(#eventConnected)
+              ProcedureReturn
+            EndIf
+          EndIf
         EndIf
-        Break
       EndIf
       Delay(10000)
     ForEver
@@ -214,9 +227,46 @@ Procedure megaplanConnect(dummy)
 EndProcedure
 
 Procedure megaplanCheck(interval.i)
-
-    
-  
+  Protected host.s = GetGadgetText(#gadHost)
+  Shared megaplanAccess.s,megaplanSecret.s,megaplanLastMsgId.i
+  Repeat
+    Protected res.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/notifications.api",host,buildTZ(),#myAgent)
+    If res = "0" Or res = "-1"
+      PostEvent(#eventDisconnected)
+      ProcedureReturn
+    Else
+      res = ReplaceString(res,#DQUOTE$ + "Content" + #DQUOTE$ + ":{" + #DQUOTE$,#DQUOTE$ + "ContentComment" + #DQUOTE$ + ":{" + #DQUOTE$)
+      Protected json = ParseJSON(#PB_Any,res,#PB_JSON_NoCase)
+      If IsJSON(json)
+        Protected queryAnswer.megaplanQuery
+        ExtractJSONStructure(JSONValue(json),@queryAnswer,megaplanQuery)
+        FreeJSON(json)
+        If GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Checked
+          ForEach queryAnswer\data\notifications()
+            If queryAnswer\data\notifications()\Id > megaplanLastMsgId
+              If Len(queryAnswer\data\notifications()\ContentComment\Subject\Name) ; it's a comment
+                ;Debug "title: " + queryAnswer\data\notifications()\name
+                ;Debug "subtitle: " + queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name
+                ;Debug "text: " + queryAnswer\data\notifications()\ContentComment\Text
+                deliverNotification(queryAnswer\data\notifications()\name,queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name,queryAnswer\data\notifications()\ContentComment\Text)
+              Else ; it's something else
+                ;Debug "title: " + queryAnswer\data\notifications()\name
+                ;Debug "text:" + queryAnswer\data\notifications()\Content
+                deliverNotification(queryAnswer\data\notifications()\name,"",queryAnswer\data\notifications()\Content)
+              EndIf
+            EndIf
+          Next
+        EndIf
+        ForEach queryAnswer\data\notifications()
+          If queryAnswer\data\notifications()\Id > megaplanLastMsgId
+            megaplanLastMsgId = queryAnswer\data\notifications()\Id
+          EndIf
+        Next
+        PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,ListSize(queryAnswer\data\notifications()))
+      EndIf
+    EndIf
+    Delay(interval)
+  ForEver
 EndProcedure
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
 ; Folding = --
