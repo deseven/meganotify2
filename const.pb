@@ -52,6 +52,7 @@ Enumeration events #PB_Event_FirstCustomValue
   #eventDisconnected
   #eventAlert
   #eventWrongCredentials
+  #eventNotification
 EndEnumeration
 
 Enumeration states

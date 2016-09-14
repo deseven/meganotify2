@@ -2,12 +2,17 @@
 
 IncludeFile "../libmegaplan/pb-wrapper.pb"
 IncludeFile "const.pb"
+IncludeFile "../pb-osx-notifications/notifications.pbi"
+
+notifications::init()
 
 Define app = CocoaMessage(0,0,"NSApplication sharedApplication")
 Define statusBar.i,statusItem.i,alerts.i,megaplanState.b
 Define connectThread.i,checkThread.i
 Define megaplanAccess.s,megaplanSecret.s
 Define megaplanLastMsgId.i
+Define delegate.i,delegateClass.i
+Define notification.notifications::osxNotification
 
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
@@ -64,15 +69,6 @@ Else
   MessageRequester(#myName,#errorMsg + "loading libmegaplan")
   End 1
 EndIf
-
-;Define objects.i = CocoaMessage(0,0,"NSArray arrayWithObject:$",@"open_url")
-;objects = CocoaMessage(0,objects,"arrayByAddingObject:$",@"ya.ru")
-;Define keys.i = CocoaMessage(0,0,"NSArray arrayWithObject:$",@"action")
-;keys = CocoaMessage(0,keys,"arrayByAddingObject:$",@"value")
-;Define options.i = CocoaMessage(0,0,"NSDictionary dictionaryWithObjects:",objects,"forKeys:",keys)
-;CocoaMessage(0,options,"setValue:$",@"Finder","forKey:$",@"open")
-;deliverNotification("testTitle","testSubtitle","testText")
-;End
 
 Repeat
   Define ev = WaitWindowEvent()
@@ -135,6 +131,11 @@ Repeat
       SetActiveGadget(#gadHost)
       CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
       MessageRequester(#myName,#invalidCredentials)
+    Case #eventNotification
+      HideWindow(#wnd,#True)
+      HideWindow(#wnd,#False)
+      RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + ~"/BumsCommon/Activity/feed.html\"","")
+      CocoaMessage(0,app,"hide:")
     Case #PB_Event_CloseWindow
       If GetGadgetState(#gadEnableStatusBar) = #PB_Checkbox_Unchecked And GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Unchecked
         If MessageRequester(#myName,#disabledWarn,#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes

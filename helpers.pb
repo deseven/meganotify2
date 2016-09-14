@@ -2,27 +2,6 @@
   vImageUnpremultiplyData_RGBA8888 (*src, *dest, flags) 
 EndImport
 
-Procedure deliverNotification(title.s,subtitle.s,text.s)
-  Static notificationCenter.i
-  If Not notificationCenter
-    notificationCenter = CocoaMessage(0,0,"NSUserNotificationCenter defaultUserNotificationCenter")
-  EndIf
-  Protected notification = CocoaMessage(0,CocoaMessage(0,0,"NSUserNotification alloc"),"init")
-  If notification
-    ;notification.setHasActionButton_(True)
-    ;notification.setActionButtonTitle_("View")
-    If Len(title) : CocoaMessage(0,notification,"setTitle:$",@title) : EndIf
-    If Len(subtitle) : CocoaMessage(0,notification,"setSubtitle:$",@subtitle) : EndIf
-    If Len(text) : CocoaMessage(0,notification,"setInformativeText:$",@text) : EndIf
-    CocoaMessage(0,notification,"setHasActionButton:",#NO)
-    ;CocoaMessage(0,notification,"setActionButtonTitle:$",@"View")
-    ;If options : CocoaMessage(0,notification,"setUserInfo:",options) : EndIf
-    CocoaMessage(0,notificationCenter,"deliverNotification:",notification)
-    ProcedureReturn #True
-  EndIf
-  ProcedureReturn #False
-EndProcedure
-
 ; concept by Kukulkan (http://forums.purebasic.com/english/viewtopic.php?f=19&t=64057)
 Procedure.b enableLoginItem(bundleID.s,state.b)
   Protected loginItemsPath.s = GetHomeDirectory() + "Library/LaunchAgents/"

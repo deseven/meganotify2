@@ -228,6 +228,7 @@ EndProcedure
 
 Procedure megaplanCheck(interval.i)
   Protected host.s = GetGadgetText(#gadHost)
+  Shared notification.notifications::osxNotification
   Shared megaplanAccess.s,megaplanSecret.s,megaplanLastMsgId.i
   Repeat
     Protected res.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/notifications.api",host,buildTZ(),#myAgent)
@@ -245,14 +246,21 @@ Procedure megaplanCheck(interval.i)
           ForEach queryAnswer\data\notifications()
             If queryAnswer\data\notifications()\Id > megaplanLastMsgId
               If Len(queryAnswer\data\notifications()\ContentComment\Subject\Name) ; it's a comment
-                ;Debug "title: " + queryAnswer\data\notifications()\name
-                ;Debug "subtitle: " + queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name
-                ;Debug "text: " + queryAnswer\data\notifications()\ContentComment\Text
-                deliverNotification(queryAnswer\data\notifications()\name,queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name,queryAnswer\data\notifications()\ContentComment\Text)
+                notification\title = queryAnswer\data\notifications()\name
+                notification\subTitle = queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name
+                notification\text = queryAnswer\data\notifications()\ContentComment\Text
+                notification\alwaysShow = #True
+                notification\deleteAfterClick = #True
+                notification\event = #eventNotification
+                notifications::sendNotification(@notification)  
               Else ; it's something else
-                ;Debug "title: " + queryAnswer\data\notifications()\name
-                ;Debug "text:" + queryAnswer\data\notifications()\Content
-                deliverNotification(queryAnswer\data\notifications()\name,"",queryAnswer\data\notifications()\Content)
+                notification\title = queryAnswer\data\notifications()\name
+                notification\subTitle = ""
+                notification\text = queryAnswer\data\notifications()\Content
+                notification\alwaysShow = #True
+                notification\deleteAfterClick = #True
+                notification\event = #eventNotification
+                notifications::sendNotification(@notification) 
               EndIf
             EndIf
           Next
