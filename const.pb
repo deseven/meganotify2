@@ -3,6 +3,10 @@
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
+#updateCheckInterval = 86400000 ; 24 hours
+#updateCheckUrl = "http://deseven.info/sys/mn.ver"
+#updateDownloadUrl = "http://deseven.info/sys/mn.dmg"
+
 #errorMsg = "Something went wrong, please try to reinstall this tool or contact the developer.\nStep: "
 #invalidCredentials = "Can't connect with provided credentials. Please re-check the information you provided."
 #disabledWarn = ~"Looks like you disabled both notifications and status bar icon. It means that you would not be able to receive any notifications at all.\nIs that really what you want?"
@@ -53,6 +57,7 @@ Enumeration events #PB_Event_FirstCustomValue
   #eventAlert
   #eventWrongCredentials
   #eventNotification
+  #eventUpdateArrived
 EndEnumeration
 
 Enumeration states

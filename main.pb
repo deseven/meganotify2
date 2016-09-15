@@ -13,6 +13,8 @@ Define megaplanAccess.s,megaplanSecret.s
 Define megaplanLastMsgId.i
 Define delegate.i,delegateClass.i
 Define notification.notifications::osxNotification
+Define updateVer.s = #myVer
+Define updateDetails.s
 
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
@@ -40,7 +42,6 @@ FrameGadget(#gadFrameSettings,10,125,280,110,"Settings")
 CheckBoxGadget(#gadEnableLoginItem,20,145,180,20,"Start on login")
 CocoaMessage(0,GadgetID(#gadEnableLoginItem),"setFocusRingType:",1)
 CheckBoxGadget(#gadEnableUpdatesCheck,20,165,180,20,"Check for updates")
-DisableGadget(#gadEnableUpdatesCheck,#True)
 CocoaMessage(0,GadgetID(#gadEnableUpdatesCheck),"setFocusRingType:",1)
 CheckBoxGadget(#gadEnableStatusBar,20,185,180,20,"Enable status bar icon")
 CocoaMessage(0,GadgetID(#gadEnableStatusBar),"setFocusRingType:",1)
@@ -62,6 +63,8 @@ If Len(GetGadgetText(#gadHost)) And Len(GetGadgetText(#gadLogin)) And Len(GetGad
   CocoaMessage(0,app,"hide:")
   PostEvent(#eventDisconnected)
 EndIf
+
+CreateThread(@checkUpdateAsync(),#updateCheckInterval)
 
 If mega_init(0,GetPathPart(ProgramFilename()) + "../Libs/libmegaplan.dylib")
   ;Debug mega_version()
@@ -136,6 +139,11 @@ Repeat
       HideWindow(#wnd,#False)
       RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + ~"/BumsCommon/Activity/feed.html\"","")
       CocoaMessage(0,app,"hide:")
+    Case #eventUpdateArrived
+      If MessageRequester(#myName + ", new version is available!","Found new version " + updateVer + ~"\n\nChangelog:\n" + updateDetails + ~"\n\nDo you want to download it?",#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes
+        RunProgram("open",~"\"" + #updateDownloadUrl + ~"\"","")
+        End
+      EndIf
     Case #PB_Event_CloseWindow
       If GetGadgetState(#gadEnableStatusBar) = #PB_Checkbox_Unchecked And GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Unchecked
         If MessageRequester(#myName,#disabledWarn,#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes

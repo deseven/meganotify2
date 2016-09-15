@@ -276,6 +276,45 @@ Procedure megaplanCheck(interval.i)
     Delay(interval)
   ForEver
 EndProcedure
+
+Procedure checkUpdateAsync(interval.i)
+  Shared updateVer.s,updateDetails.s
+  Protected *buf,i,strCount
+  If Not InitNetwork() : ProcedureReturn : EndIf
+  Repeat
+    If GetGadgetState(#gadEnableUpdatesCheck) = #PB_Checkbox_Checked
+      *buf = ReceiveHTTPMemory(#updateCheckUrl)
+      If *buf
+        Protected size.i = MemorySize(*buf)
+        Protected update.s = PeekS(*buf,size,#PB_UTF8)
+        FreeMemory(*buf)
+        strCount = CountString(update,Chr(10))
+        Protected Dim strings.s(strCount)
+        For i = 0 To strCount
+          strings(i) = StringField(update,i+1,Chr(10))
+        Next
+        For i = 0 To strCount
+          strings(i) = Trim(strings(i))
+        Next
+        If FindString(strings(0),#myName) = 1
+          Protected newVer.s = StringField(strings(0),2," ")
+          If newVer <> updateVer
+            updateVer = newVer
+            updateDetails = ""
+            For i = 1 To strCount
+              If Len(strings(i)) > 0
+                updateDetails + strings(i) + Chr(10)
+              EndIf
+            Next
+            FreeArray(strings())
+            PostEvent(#eventUpdateArrived)
+          EndIf
+        EndIf
+      EndIf
+    EndIf
+    If interval > 0 : Delay(interval) : Else : ProcedureReturn : EndIf
+  ForEver
+EndProcedure
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
 ; Folding = --
 ; EnableUnicode
