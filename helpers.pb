@@ -95,6 +95,19 @@ Procedure.s buildTZ()
     ProcedureReturn "-" + Str(offset*-1) + "00"
   EndIf
 EndProcedure
+
+Procedure hideApp(state)
+  Shared app.i
+  If state
+    CocoaMessage(0,app,"setActivationPolicy:",#NSApplicationActivationPolicyProhibited)
+  Else
+    CocoaMessage(0,app,"setActivationPolicy:",#NSApplicationActivationPolicyAccessory)
+  EndIf
+  HideWindow(#wnd,state)
+  If Not state
+    CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+  EndIf
+EndProcedure
 ; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
 ; Folding = -
 ; EnableUnicode

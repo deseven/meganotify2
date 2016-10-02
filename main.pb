@@ -60,7 +60,7 @@ updateStatusIcon()
 SetActiveGadget(-1)
 
 If Len(GetGadgetText(#gadHost)) And Len(GetGadgetText(#gadLogin)) And Len(GetGadgetText(#gadPassword))
-  CocoaMessage(0,app,"hide:")
+  hideApp(#True)
   PostEvent(#eventDisconnected)
 EndIf
 
@@ -106,14 +106,16 @@ Repeat
             RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + ~"\"","")
           Else
             SetActiveGadget(#gadHost)
-            CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+            hideApp(#False)
           EndIf
         Case #menuPrefs
           softReset()
           SetActiveGadget(-1)
-          CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+          hideApp(#False)
         Case #menuAbout
+          hideApp(#False)
           MessageRequester(#myName + " " + #myVer,~"\ncreated by deseven, 2016")
+          hideApp(#True)
         Case #menuQuit
           Break
       EndSelect
@@ -132,27 +134,30 @@ Repeat
     Case #eventWrongCredentials
       softReset()
       SetActiveGadget(#gadHost)
-      CocoaMessage(0,app,"activateIgnoringOtherApps:",#YES)
+      hideApp(#False)
       MessageRequester(#myName,#invalidCredentials)
     Case #eventNotification
-      HideWindow(#wnd,#True)
-      HideWindow(#wnd,#False)
-      RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + ~"/BumsCommon/Activity/feed.html\"","")
-      CocoaMessage(0,app,"hide:")
+      If EventData()
+        RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + "/task/" + Str(EventData()) + ~"/card/\"","")
+      Else
+        RunProgram("open",~"\"http://" + GetGadgetText(#gadHost) + ~"/BumsCommon/Activity/feed.html\"","")
+      EndIf
     Case #eventUpdateArrived
+      hideApp(#False)
       If MessageRequester(#myName + ", new version is available!","Found new version " + updateVer + ~"\n\nChangelog:\n" + updateDetails + ~"\n\nDo you want to download it?",#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes
         RunProgram("open",~"\"" + #updateDownloadUrl + ~"\"","")
         End
       EndIf
+      hideApp(#True)
     Case #PB_Event_CloseWindow
       If GetGadgetState(#gadEnableStatusBar) = #PB_Checkbox_Unchecked And GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Unchecked
         If MessageRequester(#myName,#disabledWarn,#PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes
-          CocoaMessage(0,app,"hide:")
+          hideApp(#True)
           settings(#True)
           PostEvent(#eventDisconnected)
         EndIf
       Else
-        CocoaMessage(0,app,"hide:")
+        hideApp(#True)
         settings(#True)
         PostEvent(#eventDisconnected)
       EndIf

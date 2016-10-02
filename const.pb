@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.0.0"
+#myVer = "2.1.0"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
@@ -67,6 +67,9 @@ EndEnumeration
 
 #NSWindowButtonMinimize = 1
 #NSWindowButtonMaximize = 2
+#NSApplicationActivationPolicyRegular = 0
+#NSApplicationActivationPolicyAccessory = 1
+#NSApplicationActivationPolicyProhibited = 2
 
 #loginItemPlist = ~"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 ~"<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n" +

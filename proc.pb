@@ -53,6 +53,18 @@ Procedure initResources()
       ResizeImage(#resIcon9,20,20,#PB_Image_Smooth)
       ResizeImage(#resIconMore,20,20,#PB_Image_Smooth)
     EndIf
+;     CocoaMessage(0,ImageID(#resIcon),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIconConn),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon1),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon2),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon3),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon4),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon5),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon6),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon7),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon8),"setTemplate:",#True)
+;     CocoaMessage(0,ImageID(#resIcon9),"setTemplate:",#True)
+;    CocoaMessage(0,ImageID(#resIconMore),"setTemplate:",#True)
   Else
     Debug "failed to load resources"
     End 1
@@ -232,7 +244,8 @@ Procedure megaplanCheck(interval.i)
   Shared megaplanAccess.s,megaplanSecret.s,megaplanLastMsgId.i
   Repeat
     Protected res.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/notifications.api",host,buildTZ(),#myAgent)
-    If res = "0" Or res = "-1"
+    ;Protected res_q.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/approvalsCount.api",host,buildTZ(),#myAgent)
+    If res = "0" Or res = "-1" ;Or res_q = "0" Or res_q = "-1"
       PostEvent(#eventDisconnected)
       ProcedureReturn
     Else
@@ -252,7 +265,8 @@ Procedure megaplanCheck(interval.i)
                 notification\alwaysShow = #True
                 notification\deleteAfterClick = #True
                 notification\event = #eventNotification
-                notifications::sendNotification(@notification)  
+                notification\evData = queryAnswer\data\notifications()\ContentComment\Subject\Id
+                notifications::sendNotification(@notification)
               Else ; it's something else
                 notification\title = queryAnswer\data\notifications()\name
                 notification\subTitle = ""
@@ -260,7 +274,8 @@ Procedure megaplanCheck(interval.i)
                 notification\alwaysShow = #True
                 notification\deleteAfterClick = #True
                 notification\event = #eventNotification
-                notifications::sendNotification(@notification) 
+                notification\evData = queryAnswer\data\notifications()\Subject\Id
+                notifications::sendNotification(@notification)
               EndIf
             EndIf
           Next
@@ -272,6 +287,15 @@ Procedure megaplanCheck(interval.i)
         Next
         PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,ListSize(queryAnswer\data\notifications()))
       EndIf
+      ;Debug ListSize(queryAnswer\data\notifications())
+      ;Debug res_q
+      
+      ;Protected json = ParseJSON(#PB_Any,res,#PB_JSON_NoCase)
+      ;If IsJSON(json)
+      ;  Protected queryAnswer.megaplanQuery
+      ;  ExtractJSONStructure(JSONValue(json),@queryAnswer,megaplanQuery)
+      ;  FreeJSON(json)
+      ;EndIf
     EndIf
     Delay(interval)
   ForEver
