@@ -1,10 +1,10 @@
 # MegaNotify
-[Megaplan](https://megaplan.ru/) notifications for OS X 10.8 or higher.
+[Megaplan](https://megaplan.ru/) notifications for OS X 10.8 or higher.  
 
-## binaries
-[2.0.0](http://deseven.info/sys/mn.dmg)  
+### binaries
+[latest release](http://deseven.info/sys/mn.dmg)  
 
-## compiling from source
+### compiling from source
 MegaNotify created in [PB](http://purebasic.com).  
 Depends on [pb-osx-notifications](https://github.com/deseven/pb-osx-notifications).  
 Requires [libmegaplan](https://github.com/deseven/libmegaplan).  
