@@ -14,6 +14,7 @@ Procedure initResources()
   LoadFont(#resFontMono,"Menlo",15,#PB_Font_Bold)
   LoadFont(#resFontMonoX2,"Menlo",30,#PB_Font_Bold)
   If LoadImageEx(#resIcon,path+"status_icon.png") And LoadImageEx(#resIconConn,path+"status_icon_conn.png")
+    LoadImageEx(#resIconBack,path+"alerts_back.png")
     LoadImageEx(#resIcon1,path+"1.png")
     LoadImageEx(#resIcon2,path+"2.png")
     LoadImageEx(#resIcon3,path+"3.png")
@@ -23,51 +24,119 @@ Procedure initResources()
     LoadImageEx(#resIcon7,path+"7.png")
     LoadImageEx(#resIcon8,path+"8.png")
     LoadImageEx(#resIcon9,path+"9.png")
-    LoadImageEx(#resIconMore,path+"more.png")
+    LoadImageEx(#resIcon0,path+"0.png")
     If getBackingScaleFactor() >= 2.0
       imageSize\width = 20
       imageSize\height = 20
       CocoaMessage(0,ImageID(#resIcon),"setSize:@",@ImageSize)
       CocoaMessage(0,ImageID(#resIconConn),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon1),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon2),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon3),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon4),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon5),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon6),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon7),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon8),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIcon9),"setSize:@",@ImageSize)
-      CocoaMessage(0,ImageID(#resIconMore),"setSize:@",@ImageSize)
     Else
       ResizeImage(#resIcon,20,20,#PB_Image_Smooth)
       ResizeImage(#resIconConn,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon1,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon2,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon3,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon4,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon5,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon6,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon7,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon8,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIcon9,20,20,#PB_Image_Smooth)
-      ResizeImage(#resIconMore,20,20,#PB_Image_Smooth)
+      ResizeImage(#resIcon1,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon2,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon3,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon4,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon5,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon6,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon7,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon8,6,10,#PB_Image_Smooth)
+      ResizeImage(#resIcon9,6,10,#PB_Image_Smooth)
     EndIf
-;     CocoaMessage(0,ImageID(#resIcon),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIconConn),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon1),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon2),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon3),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon4),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon5),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon6),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon7),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon8),"setTemplate:",#True)
-;     CocoaMessage(0,ImageID(#resIcon9),"setTemplate:",#True)
-;    CocoaMessage(0,ImageID(#resIconMore),"setTemplate:",#True)
+     CocoaMessage(0,ImageID(#resIcon),"setTemplate:",#True)
   Else
     Debug "failed to load resources"
     End 1
+  EndIf
+EndProcedure
+
+Procedure createNumIcon(num.i)
+  Protected imageSize.NSSize
+  If IsImage(#resIconNum) : FreeImage(#resIconNum) : EndIf
+  CreateImage(#resIconNum,40,40,32)
+  StartDrawing(ImageOutput(#resIconNum))
+  DrawingMode(#PB_2DDrawing_AllChannels)
+  DrawImage(ImageID(#resIconBack),0,0,40,40)
+  Select num
+    Case 1 To 10
+      Select num
+        Case 1
+          DrawImage(ImageID(#resIcon1),12,6,17,28)
+        Case 2
+          DrawImage(ImageID(#resIcon2),12,6,17,28)
+        Case 3
+          DrawImage(ImageID(#resIcon3),12,6,17,28)
+        Case 4
+          DrawImage(ImageID(#resIcon4),12,6,17,28)
+        Case 5
+          DrawImage(ImageID(#resIcon5),12,6,17,28)
+        Case 6
+          DrawImage(ImageID(#resIcon6),12,6,17,28)
+        Case 7
+          DrawImage(ImageID(#resIcon7),12,6,17,28)
+        Case 8
+          DrawImage(ImageID(#resIcon8),12,6,17,28)
+        Case 9
+          DrawImage(ImageID(#resIcon9),12,6,17,28)
+        Default
+          DrawImage(ImageID(#resIcon0),12,6,17,28)
+      EndSelect
+    Case 10 To 99
+      Select Left(Str(num),1)
+        Case "1"
+          DrawImage(ImageID(#resIcon1),3,6,17,28)
+        Case "2"
+          DrawImage(ImageID(#resIcon2),3,6,17,28)
+        Case "3"
+          DrawImage(ImageID(#resIcon3),3,6,17,28)
+        Case "4"
+          DrawImage(ImageID(#resIcon4),3,6,17,28)
+        Case "5"
+          DrawImage(ImageID(#resIcon5),3,6,17,28)
+        Case "6"
+          DrawImage(ImageID(#resIcon6),3,6,17,28)
+        Case "7"
+          DrawImage(ImageID(#resIcon7),3,6,17,28)
+        Case "8"
+          DrawImage(ImageID(#resIcon8),3,6,17,28)
+        Case "9"
+          DrawImage(ImageID(#resIcon9),3,6,17,28)
+        Default
+          DrawImage(ImageID(#resIcon0),3,6,17,28)
+      EndSelect
+      Select Right(Str(num),1)
+        Case "1"
+          DrawImage(ImageID(#resIcon1),20,6,17,28)
+        Case "2"
+          DrawImage(ImageID(#resIcon2),20,6,17,28)
+        Case "3"
+          DrawImage(ImageID(#resIcon3),20,6,17,28)
+        Case "4"
+          DrawImage(ImageID(#resIcon4),20,6,17,28)
+        Case "5"
+          DrawImage(ImageID(#resIcon5),20,6,17,28)
+        Case "6"
+          DrawImage(ImageID(#resIcon6),20,6,17,28)
+        Case "7"
+          DrawImage(ImageID(#resIcon7),20,6,17,28)
+        Case "8"
+          DrawImage(ImageID(#resIcon8),20,6,17,28)
+        Case "9"
+          DrawImage(ImageID(#resIcon9),20,6,17,28)
+        Default
+          DrawImage(ImageID(#resIcon0),20,6,17,28)
+      EndSelect
+    Default
+      DrawImage(ImageID(#resIcon9),3,6,17,28)
+      DrawImage(ImageID(#resIcon9),20,6,17,28)
+  EndSelect
+  StopDrawing()
+  If getBackingScaleFactor() >= 2.0
+    imageSize\width = 20
+    imageSize\height = 20
+    CocoaMessage(0,ImageID(#resIconNum),"setSize:@",@imageSize)
+  Else
+    ResizeImage(#resIconNum,20,20,#PB_Image_Smooth)
   EndIf
 EndProcedure
 
@@ -107,30 +176,12 @@ Procedure updateStatusIcon()
   Protected imageSize.NSSize
   If GetGadgetState(#gadEnableStatusBar) = #PB_Checkbox_Checked
     If megaplanState = #megaplanConnected
-      ; i do know that i should've done it differently, but well... TOO LATE!
       Select alerts
         Case 0
           CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon))
-        Case 1
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon1))
-        Case 2
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon2))
-        Case 3
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon3))
-        Case 4
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon4))
-        Case 5
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon5))
-        Case 6
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon6))
-        Case 7
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon7))
-        Case 8
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon8))
-        Case 9
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIcon9))
         Default
-          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIconMore))
+          createNumIcon(alerts)
+          CocoaMessage(0,statusItem,"setImage:",ImageID(#resIconNum))
       EndSelect
     Else
       CocoaMessage(0,statusItem,"setImage:",ImageID(#resIconConn))
@@ -339,7 +390,7 @@ Procedure checkUpdateAsync(interval.i)
     If interval > 0 : Delay(interval) : Else : ProcedureReturn : EndIf
   ForEver
 EndProcedure
-; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
-; Folding = --
+; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
+; Folding = 8-
 ; EnableUnicode
 ; EnableXP

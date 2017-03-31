@@ -1,4 +1,6 @@
-﻿EnableExplicit
+﻿Import "--stdlib=libc++ -mmacosx-version-min=10.7" : EndImport
+
+EnableExplicit
 
 IncludeFile "../libmegaplan/pb-wrapper.pb"
 IncludeFile "const.pb"
@@ -19,7 +21,7 @@ Define updateDetails.s
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
 
-OpenWindow(#wnd,#PB_Ignore,#PB_Ignore,300,240,#myName,#PB_Window_SystemMenu|#PB_Window_ScreenCentered)
+OpenWindow(#wnd,#PB_Ignore,#PB_Ignore,300,220,#myName,#PB_Window_SystemMenu|#PB_Window_ScreenCentered)
 StickyWindow(#wnd,#True)
 CocoaMessage(0,CocoaMessage(0,WindowID(#wnd),"standardWindowButton:",#NSWindowButtonMinimize),"setHidden:",#YES)
 CocoaMessage(0,CocoaMessage(0,WindowID(#wnd),"standardWindowButton:",#NSWindowButtonMaximize),"setHidden:",#YES)
@@ -38,14 +40,15 @@ CocoaMessage(0,CocoaMessage(0,GadgetID(#gadPassword),"cell"),"setPlaceholderStri
 CocoaMessage(0,GadgetID(#gadPassword),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadPassword),"setFocusRingType:",1)
 
-FrameGadget(#gadFrameSettings,10,125,280,110,"Settings")
+FrameGadget(#gadFrameSettings,10,125,280,90,"Settings")
 CheckBoxGadget(#gadEnableLoginItem,20,145,180,20,"Start on login")
 CocoaMessage(0,GadgetID(#gadEnableLoginItem),"setFocusRingType:",1)
 CheckBoxGadget(#gadEnableUpdatesCheck,20,165,180,20,"Check for updates")
 CocoaMessage(0,GadgetID(#gadEnableUpdatesCheck),"setFocusRingType:",1)
 CheckBoxGadget(#gadEnableStatusBar,20,185,180,20,"Enable status bar icon")
 CocoaMessage(0,GadgetID(#gadEnableStatusBar),"setFocusRingType:",1)
-CheckBoxGadget(#gadEnableNotifications,20,205,180,20,"Enable notifications")
+HideGadget(#gadEnableStatusBar,#True)
+CheckBoxGadget(#gadEnableNotifications,20,185,180,20,"Enable notifications")
 CocoaMessage(0,GadgetID(#gadEnableNotifications),"setFocusRingType:",1)
 
 initResources()
@@ -79,9 +82,9 @@ Repeat
   Select ev
     Case #PB_Event_Gadget
       Select EventGadget()
-        Case #gadEnableStatusBar
-          advancedStatusBar()
-          settings(#True)
+;         Case #gadEnableStatusBar
+;           advancedStatusBar()
+;           settings(#True)
         Case #gadEnableLoginItem
           If GetGadgetState(#gadEnableLoginItem) = #PB_Checkbox_Checked
             If Not enableLoginItem(#myID,#True)
@@ -163,6 +166,6 @@ Repeat
       EndIf
   EndSelect
 ForEver
-; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.44 Beta 3 LTS (MacOS X - x64)
 ; EnableUnicode
 ; EnableXP

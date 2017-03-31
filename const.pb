@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.1.0"
+#myVer = "2.2.0"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
@@ -39,6 +39,7 @@ Enumeration resources
   #resFontMonoX2
   #resIcon
   #resIconConn
+  #resIcon0
   #resIcon1
   #resIcon2
   #resIcon3
@@ -48,10 +49,11 @@ Enumeration resources
   #resIcon7
   #resIcon8
   #resIcon9
-  #resIconMore
+  #resIconBack
+  #resIconNum
 EndEnumeration
 
-Enumeration events #PB_Event_FirstCustomValue
+Enumeration #PB_Event_FirstCustomValue
   #eventConnected
   #eventDisconnected
   #eventAlert
@@ -89,6 +91,6 @@ EndEnumeration
 ~"\t<key>LimitLoadToSessionType</key>\n" +
 ~"\t<string>Aqua</string></dict>\n" +
 ~"</plist>"
-; IDE Options = PureBasic 5.42 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
 ; EnableUnicode
 ; EnableXP

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pb="/Applications/PureBasic"
+pb="/Applications/PureBasic.app/Contents/Resources"
 name="MegaNotify"
 shortName="mn"
 ident="info.deseven.meganotify"
