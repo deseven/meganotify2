@@ -17,6 +17,7 @@ Define delegate.i,delegateClass.i
 Define notification.notifications::osxNotification
 Define updateVer.s = #myVer
 Define updateDetails.s
+Define shouldMarkAllAsRead.b = #False
 
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
@@ -111,6 +112,9 @@ Repeat
             SetActiveGadget(#gadHost)
             hideApp(#False)
           EndIf
+        Case #menuMarkAllAsRead
+          shouldMarkAllAsRead = #True
+          PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,0)
         Case #menuPrefs
           softReset()
           SetActiveGadget(-1)
@@ -166,6 +170,6 @@ Repeat
       EndIf
   EndSelect
 ForEver
-; IDE Options = PureBasic 5.44 Beta 3 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
 ; EnableUnicode
 ; EnableXP

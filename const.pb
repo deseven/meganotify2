@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.2.0"
+#myVer = "2.2.1"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
@@ -29,6 +29,7 @@ EndEnumeration
 Enumeration menu
   #menu
   #menuMegaplan
+  #menuMarkAllAsRead
   #menuPrefs
   #menuAbout
   #menuQuit

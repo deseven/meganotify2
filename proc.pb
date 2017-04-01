@@ -58,7 +58,7 @@ Procedure createNumIcon(num.i)
   DrawingMode(#PB_2DDrawing_AllChannels)
   DrawImage(ImageID(#resIconBack),0,0,40,40)
   Select num
-    Case 1 To 10
+    Case 1 To 9
       Select num
         Case 1
           DrawImage(ImageID(#resIcon1),12,6,17,28)
@@ -152,6 +152,7 @@ Procedure advancedStatusBar()
     EndIf
     CreatePopupMenu(#menu)
     MenuItem(#menuMegaplan,"Open Megaplan")
+    MenuItem(#menuMarkAllAsRead,"Mark all as read")
     MenuBar()
     MenuItem(#menuPrefs,"Preferences")
     MenuItem(#menuAbout,"About")
@@ -291,8 +292,11 @@ EndProcedure
 
 Procedure megaplanCheck(interval.i)
   Protected host.s = GetGadgetText(#gadHost)
+  Protected NewList notificationIds.i()
+  Protected Ids.s
   Shared notification.notifications::osxNotification
   Shared megaplanAccess.s,megaplanSecret.s,megaplanLastMsgId.i
+  Shared shouldMarkAllAsRead.b
   Repeat
     Protected res.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/notifications.api",host,buildTZ(),#myAgent)
     ;Protected res_q.s = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/approvalsCount.api",host,buildTZ(),#myAgent)
@@ -331,11 +335,32 @@ Procedure megaplanCheck(interval.i)
             EndIf
           Next
         EndIf
+        ClearList(notificationIds())
         ForEach queryAnswer\data\notifications()
+          AddElement(notificationIds())
+          notificationIds() = queryAnswer\data\notifications()\Id
           If queryAnswer\data\notifications()\Id > megaplanLastMsgId
             megaplanLastMsgId = queryAnswer\data\notifications()\Id
           EndIf
         Next
+        If shouldMarkAllAsRead
+          If ListSize(notificationIds())
+            Ids = ""
+            ForEach notificationIds()
+              Ids + "Ids[]=" + notificationIds() + "&"
+            Next
+            Ids = Left(Ids,Len(Ids)-1)
+            Debug "/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids
+            res = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids,host,buildTZ(),#myAgent)
+            Debug res
+            If FindString(res,~"\"code\":\"ok\"")
+              ClearList(queryAnswer\data\notifications())
+              shouldMarkAllAsRead = #False
+            EndIf
+          Else
+            shouldMarkAllAsRead = #False
+          EndIf
+        EndIf
         PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,ListSize(queryAnswer\data\notifications()))
       EndIf
       ;Debug ListSize(queryAnswer\data\notifications())
@@ -391,6 +416,6 @@ Procedure checkUpdateAsync(interval.i)
   ForEver
 EndProcedure
 ; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
-; Folding = 8-
+; Folding = --
 ; EnableUnicode
 ; EnableXP
