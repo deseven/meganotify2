@@ -1,8 +1,6 @@
-﻿Import "--stdlib=libc++ -mmacosx-version-min=10.7" : EndImport
+﻿EnableExplicit
 
-EnableExplicit
-
-IncludeFile "../libmegaplan/pb-wrapper.pb"
+IncludeFile "megaplan.pb"
 IncludeFile "const.pb"
 IncludeFile "../pb-osx-notifications/notifications.pbi"
 
@@ -10,7 +8,7 @@ notifications::init()
 
 Define app = CocoaMessage(0,0,"NSApplication sharedApplication")
 Define statusBar.i,statusItem.i,alerts.i,megaplanState.b
-Define connectThread.i,checkThread.i
+Define connectThread.i,checkThread.i,updateThread.i
 Define megaplanAccess.s,megaplanSecret.s
 Define megaplanLastMsgId.i
 Define delegate.i,delegateClass.i
@@ -68,12 +66,10 @@ If Len(GetGadgetText(#gadHost)) And Len(GetGadgetText(#gadLogin)) And Len(GetGad
   PostEvent(#eventDisconnected)
 EndIf
 
-CreateThread(@checkUpdateAsync(),#updateCheckInterval)
+updateThread = CreateThread(@checkUpdateAsync(),#updateCheckInterval)
 
-If mega_init(0,GetPathPart(ProgramFilename()) + "../Libs/libmegaplan.dylib")
-  ;Debug mega_version()
-Else
-  MessageRequester(#myName,#errorMsg + "loading libmegaplan")
+If Not InitNetwork()
+  MessageRequester(#myName,#errorMsg + "network initialisation")
   End 1
 EndIf
 
@@ -170,6 +166,12 @@ Repeat
       EndIf
   EndSelect
 ForEver
-; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
-; EnableUnicode
+
+If IsThread(updateThread)  : KillThread(updateThread)  : EndIf
+If IsThread(connectThread) : KillThread(connectThread) : EndIf
+If IsThread(checkThread)   : KillThread(checkThread)   : EndIf
+; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
+; CursorPosition = 171
+; FirstLine = 140
 ; EnableXP
+; EnableUnicode

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.44 Beta 3 LTS (MacOS X - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.70 LTS (MacOS X - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="MegaNotify"/>
   </section>
   <section name="data">
     <explorer view="../../" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2016-12-17 16:08" user="deseven" host="de7air.local"/>
+    <lastopen date="2019-04-14 19:30" user="deseven" host="de7mac.local"/>
   </section>
   <section name="files">
     <file name="const.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="8a8b9890e959a41429680e9259fd5b16"/>
+      <fingerprint md5="4689aa4e0c3a4d3dd9d65b55cd592c17"/>
     </file>
     <file name="helpers.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -20,11 +20,15 @@
     </file>
     <file name="main.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="5b106303fec8377a5bcdf0fad43ba4a4"/>
+      <fingerprint md5="4e74c34ef80647578dab02ad47775748"/>
+    </file>
+    <file name="megaplan.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="78cbc02add490f456c669b0fada659be"/>
     </file>
     <file name="proc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="b2a7b9940221f5a2f6a89f52c89c9788"/>
+      <fingerprint md5="e35367a1fd7a13b56ed27379b8a4cb80"/>
     </file>
   </section>
   <section name="targets">
@@ -32,9 +36,9 @@
       <inputfile value="main.pb"/>
       <outputfile value="MegaNotify.app"/>
       <executable value="MegaNotify.app"/>
-      <options unicode="1" xpskin="1" debug="1"/>
+      <options unicode="1" thread="1" xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
-      <tools>MN_INJECT,MN_INJECT_BUILD</tools>
+      <tools>MEGANOTIFY_INJECT,MEGANOTIFY_INJECT_BUILD</tools>
     </target>
   </section>
 </project>

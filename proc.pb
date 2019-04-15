@@ -307,40 +307,40 @@ Procedure megaplanCheck(interval.i)
       res = ReplaceString(res,#DQUOTE$ + "Content" + #DQUOTE$ + ":{" + #DQUOTE$,#DQUOTE$ + "ContentComment" + #DQUOTE$ + ":{" + #DQUOTE$)
       Protected json = ParseJSON(#PB_Any,res,#PB_JSON_NoCase)
       If IsJSON(json)
-        Protected queryAnswer.megaplanQuery
-        ExtractJSONStructure(JSONValue(json),@queryAnswer,megaplanQuery)
+        Protected *queryAnswer.megaplanQuery = AllocateStructure(megaplanQuery)
+        ExtractJSONStructure(JSONValue(json),*queryAnswer,megaplanQuery)
         FreeJSON(json)
         If GetGadgetState(#gadEnableNotifications) = #PB_Checkbox_Checked
-          ForEach queryAnswer\data\notifications()
-            If queryAnswer\data\notifications()\Id > megaplanLastMsgId
-              If Len(queryAnswer\data\notifications()\ContentComment\Subject\Name) ; it's a comment
-                notification\title = queryAnswer\data\notifications()\name
-                notification\subTitle = queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + queryAnswer\data\notifications()\ContentComment\Author\Name
-                notification\text = queryAnswer\data\notifications()\ContentComment\Text
+          ForEach *queryAnswer\data\notifications()
+            If *queryAnswer\data\notifications()\Id > megaplanLastMsgId
+              If Len(*queryAnswer\data\notifications()\ContentComment\Subject\Name) ; it's a comment
+                notification\title = *queryAnswer\data\notifications()\name
+                notification\subTitle = *queryAnswer\data\notifications()\ContentComment\Subject\Name + ", " + *queryAnswer\data\notifications()\ContentComment\Author\Name
+                notification\text = *queryAnswer\data\notifications()\ContentComment\Text
                 notification\alwaysShow = #True
                 notification\deleteAfterClick = #True
                 notification\event = #eventNotification
-                notification\evData = queryAnswer\data\notifications()\ContentComment\Subject\Id
+                notification\evData = *queryAnswer\data\notifications()\ContentComment\Subject\Id
                 notifications::sendNotification(@notification)
               Else ; it's something else
-                notification\title = queryAnswer\data\notifications()\name
+                notification\title = *queryAnswer\data\notifications()\name
                 notification\subTitle = ""
-                notification\text = queryAnswer\data\notifications()\Content
+                notification\text = *queryAnswer\data\notifications()\Content
                 notification\alwaysShow = #True
                 notification\deleteAfterClick = #True
                 notification\event = #eventNotification
-                notification\evData = queryAnswer\data\notifications()\Subject\Id
+                notification\evData = *queryAnswer\data\notifications()\Subject\Id
                 notifications::sendNotification(@notification)
               EndIf
             EndIf
           Next
         EndIf
         ClearList(notificationIds())
-        ForEach queryAnswer\data\notifications()
+        ForEach *queryAnswer\data\notifications()
           AddElement(notificationIds())
-          notificationIds() = queryAnswer\data\notifications()\Id
-          If queryAnswer\data\notifications()\Id > megaplanLastMsgId
-            megaplanLastMsgId = queryAnswer\data\notifications()\Id
+          notificationIds() = *queryAnswer\data\notifications()\Id
+          If *queryAnswer\data\notifications()\Id > megaplanLastMsgId
+            megaplanLastMsgId = *queryAnswer\data\notifications()\Id
           EndIf
         Next
         If shouldMarkAllAsRead
@@ -350,28 +350,20 @@ Procedure megaplanCheck(interval.i)
               Ids + "Ids[]=" + notificationIds() + "&"
             Next
             Ids = Left(Ids,Len(Ids)-1)
-            Debug "/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids
+            ;Debug "/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids
             res = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids,host,buildTZ(),#myAgent)
-            Debug res
+            ;Debug res
             If FindString(res,~"\"code\":\"ok\"")
-              ClearList(queryAnswer\data\notifications())
+              ClearList(*queryAnswer\data\notifications())
               shouldMarkAllAsRead = #False
             EndIf
           Else
             shouldMarkAllAsRead = #False
           EndIf
         EndIf
-        PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,ListSize(queryAnswer\data\notifications()))
+        PostEvent(#eventAlert,#PB_Ignore,#PB_Ignore,#PB_Ignore,ListSize(*queryAnswer\data\notifications()))
+        FreeStructure(*queryAnswer)
       EndIf
-      ;Debug ListSize(queryAnswer\data\notifications())
-      ;Debug res_q
-      
-      ;Protected json = ParseJSON(#PB_Any,res,#PB_JSON_NoCase)
-      ;If IsJSON(json)
-      ;  Protected queryAnswer.megaplanQuery
-      ;  ExtractJSONStructure(JSONValue(json),@queryAnswer,megaplanQuery)
-      ;  FreeJSON(json)
-      ;EndIf
     EndIf
     Delay(interval)
   ForEver
@@ -415,7 +407,9 @@ Procedure checkUpdateAsync(interval.i)
     If interval > 0 : Delay(interval) : Else : ProcedureReturn : EndIf
   ForEver
 EndProcedure
-; IDE Options = PureBasic 5.44 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
+; CursorPosition = 300
+; FirstLine = 292
 ; Folding = --
-; EnableUnicode
 ; EnableXP
+; EnableUnicode
