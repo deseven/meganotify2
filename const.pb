@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.2.1"
+#myVer = "2.3.0"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
@@ -11,7 +11,7 @@
 #invalidCredentials = "Can't connect with provided credentials. Please re-check the information you provided."
 #disabledWarn = ~"Looks like you disabled both notifications and status bar icon. It means that you would not be able to receive any notifications at all.\nIs that really what you want?"
 
-#megaplanCheckInterval = 10000
+#megaplanCheckInterval = 15000
 
 Enumeration gadgets
   #wnd
@@ -92,7 +92,7 @@ EndEnumeration
 ~"\t<key>LimitLoadToSessionType</key>\n" +
 ~"\t<string>Aqua</string></dict>\n" +
 ~"</plist>"
-; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
-; CursorPosition = 14
+; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
+; CursorPosition = 1
 ; EnableXP
 ; EnableUnicode

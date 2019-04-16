@@ -7,12 +7,12 @@
   <section name="data">
     <explorer view="../../" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2019-04-14 19:30" user="deseven" host="de7mac.local"/>
+    <lastopen date="2019-04-16 01:24" user="deseven" host="de7mac.local"/>
   </section>
   <section name="files">
     <file name="const.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="4689aa4e0c3a4d3dd9d65b55cd592c17"/>
+      <fingerprint md5="816a64ce8fe200df9ff41a144513bdfe"/>
     </file>
     <file name="helpers.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -28,7 +28,7 @@
     </file>
     <file name="proc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="e35367a1fd7a13b56ed27379b8a4cb80"/>
+      <fingerprint md5="6042254fa4fd7d89621ad64ea2978d02"/>
     </file>
   </section>
   <section name="targets">
@@ -36,7 +36,7 @@
       <inputfile value="main.pb"/>
       <outputfile value="MegaNotify.app"/>
       <executable value="MegaNotify.app"/>
-      <options unicode="1" thread="1" xpskin="1" debug="1"/>
+      <options unicode="1" xpskin="1" debug="1"/>
       <temporaryexe value="source"/>
       <tools>MEGANOTIFY_INJECT,MEGANOTIFY_INJECT_BUILD</tools>
     </target>
