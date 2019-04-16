@@ -26,15 +26,15 @@ CocoaMessage(0,CocoaMessage(0,WindowID(#wnd),"standardWindowButton:",#NSWindowBu
 CocoaMessage(0,CocoaMessage(0,WindowID(#wnd),"standardWindowButton:",#NSWindowButtonMaximize),"setHidden:",#YES)
 
 FrameGadget(#gadFrameConnection,10,10,280,110,"Connection")
-StringGadget(#gadHost,20,25,260,30,"")
+StringGadget(#gadHost,20,33,260,25,"")
 CocoaMessage(0,CocoaMessage(0,GadgetID(#gadHost),"cell"),"setPlaceholderString:$",@"Megaplan hostname")
 CocoaMessage(0,GadgetID(#gadHost),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadHost),"setFocusRingType:",1)
-StringGadget(#gadLogin,20,55,260,30,"")
+StringGadget(#gadLogin,20,58,260,25,"")
 CocoaMessage(0,CocoaMessage(0,GadgetID(#gadLogin),"cell"),"setPlaceholderString:$",@"Login")
 CocoaMessage(0,GadgetID(#gadLogin),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadLogin),"setFocusRingType:",1)
-StringGadget(#gadPassword,20,85,260,30,"",#PB_String_Password)
+StringGadget(#gadPassword,20,83,260,25,"",#PB_String_Password)
 CocoaMessage(0,CocoaMessage(0,GadgetID(#gadPassword),"cell"),"setPlaceholderString:$",@"Password")
 CocoaMessage(0,GadgetID(#gadPassword),"setBezelStyle:",1)
 CocoaMessage(0,GadgetID(#gadPassword),"setFocusRingType:",1)
@@ -170,8 +170,8 @@ ForEver
 If IsThread(updateThread)  : KillThread(updateThread)  : EndIf
 If IsThread(connectThread) : KillThread(connectThread) : EndIf
 If IsThread(checkThread)   : KillThread(checkThread)   : EndIf
-; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
-; CursorPosition = 171
-; FirstLine = 140
+; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
+; CursorPosition = 36
+; FirstLine = 14
 ; EnableXP
 ; EnableUnicode

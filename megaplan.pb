@@ -236,8 +236,6 @@ Procedure.s mega_query(access_id.s,secret_key.s,query.s,base_url.s,timezone.s,ag
   If req
     code = HTTPInfo(req,#PB_HTTP_StatusCode)
     res = HTTPInfo(req,#PB_HTTP_Response)
-    Debug code
-    Debug res
     FinishHTTP(req)
     Select code
       Case "401","403"
@@ -254,8 +252,8 @@ EndProcedure
 ;Procedure.s mega_comparedates(date1.s,date2.s)
   
 ;EndProcedure
-; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
-; CursorPosition = 244
-; FirstLine = 224
+; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
+; CursorPosition = 237
+; FirstLine = 218
 ; Folding = -
 ; EnableXP

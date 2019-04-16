@@ -350,9 +350,7 @@ Procedure megaplanCheck(interval.i)
               Ids + "Ids[]=" + notificationIds() + "&"
             Next
             Ids = Left(Ids,Len(Ids)-1)
-            ;Debug "/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids
             res = mega_query(megaplanAccess,megaplanSecret,"/BumsCommonApiV01/Informer/deactivateNotification.api?"+Ids,host,buildTZ(),#myAgent)
-            ;Debug res
             If FindString(res,~"\"code\":\"ok\"")
               ClearList(*queryAnswer\data\notifications())
               shouldMarkAllAsRead = #False
@@ -408,8 +406,8 @@ Procedure checkUpdateAsync(interval.i)
   ForEver
 EndProcedure
 ; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
-; CursorPosition = 295
-; FirstLine = 280
+; CursorPosition = 342
+; FirstLine = 333
 ; Folding = --
 ; EnableXP
 ; EnableUnicode
