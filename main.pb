@@ -20,6 +20,8 @@ Define shouldMarkAllAsRead.b = #False
 IncludeFile "helpers.pb"
 IncludeFile "proc.pb"
 
+OnErrorCall(@errorHandler())
+
 OpenWindow(#wnd,#PB_Ignore,#PB_Ignore,300,220,#myName,#PB_Window_SystemMenu|#PB_Window_ScreenCentered)
 StickyWindow(#wnd,#True)
 CocoaMessage(0,CocoaMessage(0,WindowID(#wnd),"standardWindowButton:",#NSWindowButtonMinimize),"setHidden:",#YES)
@@ -171,7 +173,6 @@ If IsThread(updateThread)  : KillThread(updateThread)  : EndIf
 If IsThread(connectThread) : KillThread(connectThread) : EndIf
 If IsThread(checkThread)   : KillThread(checkThread)   : EndIf
 ; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
-; CursorPosition = 36
-; FirstLine = 14
+; CursorPosition = 22
 ; EnableXP
 ; EnableUnicode

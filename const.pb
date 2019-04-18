@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.3.0"
+#myVer = "2.3.1"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 

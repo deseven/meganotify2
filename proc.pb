@@ -8,6 +8,25 @@
   updateStatusIcon()
 EndMacro
 
+Procedure restartApp(delay.i)
+  Protected task = CocoaMessage(0,CocoaMessage(0,CocoaMessage(0,0,"NSTask alloc"),"init"),"autorelease")
+  Protected args = CocoaMessage(0,0,"NSMutableArray arrayWithCapacity:",0)
+  Protected appPath.s = PeekS(CocoaMessage(0,CocoaMessage(0,CocoaMessage(0,0,"NSBundle mainBundle"),"bundlePath"),"UTF8String"),-1,#PB_UTF8)
+  Protected command.s = "sleep " + Str(delay) + ~"; open -a \"" + appPath + ~"\""
+  CocoaMessage(0,args,"addObject:$",@"-c")
+  CocoaMessage(0,args,"addObject:$",@command)
+  CocoaMessage(0,task,"setLaunchPath:$",@"/bin/sh")
+  CocoaMessage(0,task,"setArguments:",args)
+  CocoaMessage(0,task,"launch")
+  End
+EndProcedure
+
+Procedure errorHandler()
+  ;MessageRequester(#myName,"I'm crashed, press OK to restart...")
+  restartApp(3)
+  End
+EndProcedure
+
 Procedure initResources()
   Protected imageSize.NSSize
   Protected path.s = GetPathPart(ProgramFilename()) + "../Resources/"
@@ -406,8 +425,7 @@ Procedure checkUpdateAsync(interval.i)
   ForEver
 EndProcedure
 ; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
-; CursorPosition = 342
-; FirstLine = 333
+; CursorPosition = 25
 ; Folding = --
 ; EnableXP
 ; EnableUnicode
