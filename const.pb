@@ -1,5 +1,5 @@
 ﻿#myName = "MegaNotify"
-#myVer = "2.3.1"
+#myVer = "2.3.2"
 #myAgent = #myName + "/" + #myVer
 #myID = "info.deseven.meganotify"
 
@@ -92,7 +92,7 @@ EndEnumeration
 ~"\t<key>LimitLoadToSessionType</key>\n" +
 ~"\t<string>Aqua</string></dict>\n" +
 ~"</plist>"
-; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
 ; CursorPosition = 1
 ; EnableXP
 ; EnableUnicode

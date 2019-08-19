@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.70 LTS (MacOS X - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.71 beta 1 LTS (MacOS X - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="MegaNotify"/>
   </section>
   <section name="data">
     <explorer view="../../" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2019-04-16 01:24" user="deseven" host="de7mac.local"/>
+    <lastopen date="2019-04-19 23:20" user="deseven" host="de7mac.local"/>
   </section>
   <section name="files">
     <file name="const.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="816a64ce8fe200df9ff41a144513bdfe"/>
+      <fingerprint md5="61ec588760f48a5b991b2fdfcc5b7415"/>
     </file>
     <file name="helpers.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
@@ -20,15 +20,15 @@
     </file>
     <file name="main.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="4e74c34ef80647578dab02ad47775748"/>
+      <fingerprint md5="d0819ff6ed78c9cf99c07cf31c3ccdfa"/>
     </file>
     <file name="megaplan.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="78cbc02add490f456c669b0fada659be"/>
+      <fingerprint md5="4696cb2f7a3ac83f5c479811d000855f"/>
     </file>
     <file name="proc.pb">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="6042254fa4fd7d89621ad64ea2978d02"/>
+      <fingerprint md5="750b0829d7a86db342cef13925e3f2e2"/>
     </file>
   </section>
   <section name="targets">
@@ -36,7 +36,7 @@
       <inputfile value="main.pb"/>
       <outputfile value="MegaNotify.app"/>
       <executable value="MegaNotify.app"/>
-      <options unicode="1" xpskin="1" debug="1"/>
+      <options unicode="1" xpskin="1" onerror="1" debug="1"/>
       <temporaryexe value="source"/>
       <tools>MEGANOTIFY_INJECT,MEGANOTIFY_INJECT_BUILD</tools>
     </target>

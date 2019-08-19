@@ -252,8 +252,8 @@ EndProcedure
 ;Procedure.s mega_comparedates(date1.s,date2.s)
   
 ;EndProcedure
-; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
-; CursorPosition = 237
-; FirstLine = 218
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
+; CursorPosition = 199
+; FirstLine = 173
 ; Folding = -
 ; EnableXP

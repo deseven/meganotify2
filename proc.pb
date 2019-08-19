@@ -424,8 +424,9 @@ Procedure checkUpdateAsync(interval.i)
     If interval > 0 : Delay(interval) : Else : ProcedureReturn : EndIf
   ForEver
 EndProcedure
-; IDE Options = PureBasic 5.71 beta 1 LTS (MacOS X - x64)
-; CursorPosition = 25
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
+; CursorPosition = 326
+; FirstLine = 314
 ; Folding = --
 ; EnableXP
 ; EnableUnicode
