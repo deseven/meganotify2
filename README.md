@@ -1,3 +1,6 @@
+# ! THIS PROJECT IS ABANDONED AND UNSTABLE !
+# ! DO NOT USE IT !
+
 # MegaNotify
 [Megaplan](https://megaplan.ru/) notifications for OS X 10.8 or higher.  
 
